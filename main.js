@@ -86,7 +86,8 @@ function download(filename, text) {
   element.click();
 
   document.body.removeChild(element);
-}function downloadjson() {
+}
+function downloadjson() {
     // Create a popup box element
     const popupBox = document.createElement('div');
     popupBox.id = 'popup-box';
@@ -95,13 +96,13 @@ function download(filename, text) {
     popupBox.style.left = '50%';
     popupBox.style.transform = 'translate(-50%, -50%)';
     popupBox.style.width = '300px';
-    popupBox.style.height = '100px';
+    popupBox.style.height = '150px';
     popupBox.style.backgroundColor = 'white';
     popupBox.style.border = '2px solid black';
     popupBox.style.padding = '2px 16px';
     popupBox.style.margin = '10px';
-    popupBox.style.background='transperent';
-    popupBox.style.boxShadow='0 8px 16px 0 rgba(0,0,0,0.2)'
+    popupBox.style.background = 'transparent';
+    popupBox.style.boxShadow = '0 8px 16px 0 rgba(0,0,0,0.2)';
     popupBox.style.zIndex = '1000'; // Ensure it's above other elements
   
     // Create a text input element for the filename
@@ -109,6 +110,11 @@ function download(filename, text) {
     filenameInput.type = 'text';
     filenameInput.id = 'filename-input';
     filenameInput.placeholder = 'Enter the filename (with .java extension)';
+  
+    // Create an error message element
+    const errorMessage = document.createElement('div');
+    errorMessage.style.color = 'red';
+    errorMessage.style.marginTop = '10px';
   
     // Create a submit button
     const submitButton = document.createElement('button');
@@ -120,17 +126,21 @@ function download(filename, text) {
       // Get the filename from the text input element
       const filename = filenameInput.value.trim();
   
-      if (filename) {
+      if (filename.endsWith('.java')) {
         // Trigger the download using the download function
         download(filename, document.getElementById('pojos').value);
   
         // Hide the popup box
         document.body.removeChild(popupBox);
+      } else {
+        // Show an error message for incorrect file extension
+        errorMessage.textContent = 'Invalid file extension. Please enter a .java file.';
       }
     });
   
-    // Add the filename input element and the submit button to the popup box
+    // Add the filename input element, error message, and the submit button to the popup box
     popupBox.appendChild(filenameInput);
+    popupBox.appendChild(errorMessage);
     popupBox.appendChild(submitButton);
   
     // Add the popup box to the document body
