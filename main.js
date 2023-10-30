@@ -1,0 +1,142 @@
+
+const parse = () => {
+
+    // clear converter textarea
+    document.getElementById("pojos").value = '';
+    let rootElementClassName = document.getElementById("root-element").value;
+
+    if (rootElementClassName == '') {
+        rootElementClassName = 'RootElement';
+    }
+
+    /* Advanced Options */
+
+    // package naming
+    let packageDefinition = "com.foobar.pojo";
+    let isPackage = false;
+    if (document.getElementById('package-options').style.visibility == 'visible' && document.getElementById("package-definition").value != '') {
+        packageDefinition = document.getElementById("package-definition").value;
+        isPackage = true;
+    }
+
+    // auto generation of import statements
+    let isCreateImpots = false;
+    if (document.getElementById('advanced-options').style.visibility == 'visible' && document.getElementById("import-options").checked) {
+        isCreateImpots = true;
+    }
+
+    // access modifier 'private' for created fields
+    let isPrivateFields = false;
+    if (document.getElementById('advanced-options').style.visibility == 'visible' && document.getElementById("private-options").checked) {
+        isPrivateFields = true;
+    }
+
+    // create getter and setter methods
+    let isCreateGS = false;
+    if (document.getElementById('advanced-options').style.visibility == 'visible' && document.getElementById("gs-options").checked) {
+        isCreateGS = true;
+    }
+
+    // create builder methods
+    let isBuilder = false;
+    if (document.getElementById('advanced-options').style.visibility == 'visible' && document.getElementById("builder-options").checked) {
+        isBuilder = true;
+    }
+
+    let config = {};
+    config.identifier = rootElementClassName;
+    config.packageDefinition = packageDefinition;
+    config.isPackage = isPackage;
+    config.isCreateImpots = isCreateImpots;
+    config.isPrivateFields = isPrivateFields;
+    config.isCreateGS = isCreateGS;
+    config.isBuilder = isBuilder;
+
+    try {
+        let pojos = [];
+        let json = document.getElementById("json").value;
+
+        toPojo(pojos, json, config);
+
+        pojos.forEach(p => {
+            document.getElementById("pojos").value += p + '\n\n';
+        })
+    } catch (error) {
+        console.log(error);
+        document.getElementById("pojos").value = 'Error parsing JSON';
+    }
+}
+
+const optionsClick = (o) => {
+    let isVisible = document.getElementById(o).style.visibility;
+    if (isVisible == 'hidden') {
+        document.getElementById(o).style.visibility = 'visible';
+    } else {
+        document.getElementById(o).style.visibility = 'hidden';
+    }
+}
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}function downloadjson() {
+    // Create a popup box element
+    const popupBox = document.createElement('div');
+    popupBox.id = 'popup-box';
+    popupBox.style.position = 'fixed';
+    popupBox.style.top = '50%';
+    popupBox.style.left = '50%';
+    popupBox.style.transform = 'translate(-50%, -50%)';
+    popupBox.style.width = '300px';
+    popupBox.style.height = '100px';
+    popupBox.style.backgroundColor = 'white';
+    popupBox.style.border = '2px solid black';
+    popupBox.style.padding = '2px 16px';
+    popupBox.style.margin = '10px';
+    popupBox.style.background='transperent';
+    popupBox.style.boxShadow='0 8px 16px 0 rgba(0,0,0,0.2)'
+    popupBox.style.zIndex = '1000'; // Ensure it's above other elements
+  
+    // Create a text input element for the filename
+    const filenameInput = document.createElement('input');
+    filenameInput.type = 'text';
+    filenameInput.id = 'filename-input';
+    filenameInput.placeholder = 'Enter the filename (with .java extension)';
+  
+    // Create a submit button
+    const submitButton = document.createElement('button');
+    submitButton.type = 'button';
+    submitButton.textContent = 'Submit';
+  
+    // Add a click event listener to the submit button
+    submitButton.addEventListener('click', function() {
+      // Get the filename from the text input element
+      const filename = filenameInput.value.trim();
+  
+      if (filename) {
+        // Trigger the download using the download function
+        download(filename, document.getElementById('pojos').value);
+  
+        // Hide the popup box
+        document.body.removeChild(popupBox);
+      }
+    });
+  
+    // Add the filename input element and the submit button to the popup box
+    popupBox.appendChild(filenameInput);
+    popupBox.appendChild(submitButton);
+  
+    // Add the popup box to the document body
+    document.body.appendChild(popupBox);
+  
+    // Focus the filename input element
+    filenameInput.focus();
+  }
+  
