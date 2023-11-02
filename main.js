@@ -1,4 +1,3 @@
-
 const parse = () => {
 
     // clear converter textarea
@@ -96,20 +95,43 @@ function downloadjson() {
     popupBox.style.left = '50%';
     popupBox.style.transform = 'translate(-50%, -50%)';
     popupBox.style.width = '300px';
-    popupBox.style.height = '150px';
+    popupBox.style.height = '180px';
     popupBox.style.backgroundColor = 'white';
-    popupBox.style.border = '2px solid black';
+    popupBox.style.border = '1px solid black';
     popupBox.style.padding = '2px 16px';
     popupBox.style.margin = '10px';
     popupBox.style.background = 'transparent';
     popupBox.style.boxShadow = '0 8px 16px 0 rgba(0,0,0,0.2)';
     popupBox.style.zIndex = '1000'; // Ensure it's above other elements
+
+    const closeButton = document.createElement('button');
+    closeButton.type = 'button';
+    closeButton.textContent = 'X';
+    closeButton.style.position = 'absolute';
+    closeButton.style.top = '5px';
+    closeButton.style.right = '5px';
+    closeButton.style.cursor = 'pointer';
+    closeButton.style.color='red';
   
+    // Add a click event listener to the close button
+    closeButton.addEventListener('click', function() {
+      // Remove the popup box from the document body
+      document.body.removeChild(popupBox);
+    });
+  
+    // Add the close button to the popup box
+    popupBox.appendChild(closeButton);
     // Create a text input element for the filename
     const filenameInput = document.createElement('input');
     filenameInput.type = 'text';
     filenameInput.id = 'filename-input';
     filenameInput.placeholder = 'Enter the filename (with .java extension)';
+    filenameInput.style.marginTop='30px';
+    filenameInput.style.width= '100%';
+    filenameInput.style.padding= '0px 20px';
+    // filenameInput.style.margin= '8px 0';
+    filenameInput.style.border='2px solid black';
+    filenameInput.style.boxSizing='border-box';
   
     // Create an error message element
     const errorMessage = document.createElement('div');
@@ -120,6 +142,7 @@ function downloadjson() {
     const submitButton = document.createElement('button');
     submitButton.type = 'button';
     submitButton.textContent = 'Submit';
+    submitButton.style.color='green';
   
     // Add a click event listener to the submit button
     submitButton.addEventListener('click', function() {
