@@ -3,7 +3,10 @@ function toPojo(pojos, jsonString, config) {
 
     let pojo = '';
     let subClasses = [];
-
+    subClasses.forEach(c => {
+        config.identifier = capitalize(c.fieldName);
+        toPojo(pojos, JSON.stringify(c.val), config);
+    });
     let isListUsed = false;
 
     pojo += 'public class ' + config.identifier + ' {\n';
